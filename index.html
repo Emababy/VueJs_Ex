@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ex VueJs</title>
+</head>
+<body>
+
+    <!-- MVVM MODEL -->
+
+    <!-- View -->
+    <div id="Ziad_App">     <!-- Ziad_App -> el -->
+        <h1>Welcome to VueJs Example</h1>
+        <p>Welcome {{ name.length > 4 ? 'Mr ' + name : "name's to short" }}  we're happy to see you</p> <!-- condition ? true : false -->
+        <p>Your age is : {{age + ' Years'}}</p>
+        <p>Your First Skill is : {{Skills[0]}} </p>
+        <p>Your're {{ isAvailable ? 'Available' : 'Not Available'}}</p>
+        <p>Your First Test Name : {{ completedTests[0].testName }}</p>
+        <p>Your First Test Result : {{ completedTests[0].testResult }}</p>
+        <p>{{saySomeThing()}}</p>
+        <p>{{sayMyName()}}</p>
+        <p>{{calcYourAgeInDays()}}</p>
+        <p>{{ date }}</p>
+        <button @click="showNewDate">Show New Date</button>
+
+        <p v-text="name"></p>
+        <p v-text="isAvailable ? 'Available' : 'Not Available' "></p>
+        <p v-html="title"></p> <!-- if we change the v-html to v-text the output will be <div class='rank'>Pro</div>   -->
+
+        <ul>
+            <li v-for="Skill in Skills">
+                {{ Skill }}
+            </li>
+        </ul>
+        <ul>
+            <li v-for="(Skill , index) in Skills">
+                {{ index + 1 }} => {{ Skill }}
+            </li>
+        </ul>
+        <ul>
+            <li v-for="completedTest in completedTests">
+                {{ completedTest.testName }} => {{ completedTest.testResult}}
+            </li>
+        </ul>
+        <ul>
+            <li v-for="(completedTest , index ) in completedTests">
+                {{index + 1}} => {{ completedTest.testName }} => {{ completedTest.testResult}}
+            </li>
+        </ul>
+
+        <p v-if="name">Welcome {{name}}</p>
+        <p v-if="age < 10">You're still young and your age is: {{ age }}</p>
+        <p v-else-if="age >= 10 && age < 50">You're still in good shape and your age is: {{ age }}</p>
+        <p v-else>Testing</p>
+
+        <p v-once>Welcome{{name}}</p>   <!-- make this element static whenever i changed this property in VueJs devtools never changed in page -->
+        <p v-show="name">Welcome {{ name }}</p>     <!-- Display none only not like v-if -->
+        
+        <a v-bind:href="imageUrl">
+            <img v-bing:src="imageSrc" v-bind:alt="imageAltText">   <!-- shorthand -> :src - :alt -->
+        </a>
+
+        <!-- handling Event -->
+        <p>counter is {{ counter }}</p>
+        <button @click="counter+=2">Increase Counter</button>     <!--shorthand -> @ -->
+
+        <form action="index.html" method="post" class="">
+            <input type="text"  :value="source" placeholder="Using v-bind"> <!-- one way binding -->
+            <input type="text" v-model="source" placeholder="Using v-model"> <!-- Two way binding -->
+        </form>
+        Your Name Is {{source}}
+
+        <!-- Create Components -->
+        <app-count :source="source" :date="date"></app-count>
+        <app-count :source="source"></app-count>
+
+        <app-article v-for="post in posts" :title="post.title" :author="post.author" :id="post.id"></app-article>
+
+        <p>{{ calcAge }}</p>
+        <p>{{ decorateMsg }}</p>
+        {{firstName + ' ' + lastName}}
+        <p>{{ showFullName }}</p>
+
+        <label for="">Search For Programming Languages: </label>
+        <input type="text" v-model="findLang">
+        <ul>
+            <li v-for="lang in filterLang">
+                {{ lang }}
+            </li>
+        </ul>
+
+        <label>Write Your UserName:</label>
+        <input type="text" v-model.lazy="username">
+        <p>{{ ValidateUserName }}</p>
+    </div>
+
+    <script src="JS/vue.js"></script>
+
+    <script>
+
+        // Create Component:
+        Vue.component('app-count',{
+            data: function () {
+                return {
+                    name : 'Embaby',
+                    count : 0
+                }
+            } ,
+            props: ['source','date'],
+            template: '<p @click="count++">Hello {{name}} You have clicked this paragraph {{count}} Times and source is {{source}} and the date is {{date}}.</p>'
+        })
+
+        // simulation database post
+        Vue.component('app-article',{
+            data: function () {
+                return {
+                    name : 'Ziad',
+                    count : 0
+                }
+            } ,
+            props: ['title','author','id'],
+            template: '<p @click="count++">Hello {{name}} article name is {{ title }} , the author is {{ author }} , his id is {{ id }}</p>'
+        })
+
+        // View Model 
+        var VM = new Vue ({
+            el: '#Ziad_App', // el -> element
+            data: {
+                name : 'ZiadE',
+                age : 20,
+                date : "Today",
+                Skills : ['HTML','CSS','JS','VueJs'],
+                isAvailable : true,
+                completedTests : [
+                    {
+                        testName : 'First Test',
+                        testResult :'80%'
+                    },
+                    {
+                        testName : 'Second Test',
+                        testResult :'70%'
+                    },
+                    {
+                        testName : 'Third Test',
+                        testResult :'90%'
+                    },
+                ],
+                title : "<div class='rank'>Pro</div>",
+
+                imageSrc: 'imgs/01.jpg',
+                imageAltText: 'The Alternate Text',
+                imageUrl: 'https://www.google.com',
+
+                counter: 0,
+
+                source : "Ziad",
+                message : 'Hello world from VueJS!',
+                firstName : 'John',
+                lastName : 'Doe',
+
+                // simulation database post
+                posts: [
+                    { id: 1, author: 'Ziad', title: 'The Alternate Text'},
+                    { id: 2, author: 'Ahmed', title: 'The Alternate Text 2'},
+                    { id: 3, author: 'Belal', title: 'The Alternate Text 3'},
+                    { id: 4, author: 'Shipa', title: 'The Alternate Text 4'},
+                    { id: 5, author: 'Osama', title: 'The Alternate Text 5'}
+                ],
+
+                findLang: '',
+                languages: [ 
+                    'HTML',
+                    'JavaScript',
+                    'SASS',
+                    'PHP',
+                    'PYTHON',
+                    'C#',
+                    'java',
+                    'CSS',
+                ],
+
+                username: '',
+
+            },
+            methods: {
+                saySomeThing : function() {
+                    return "Hello From VueJs Methods!";
+                },
+                sayMyName : function(){
+                    return this.name;
+                },
+                calcYourAgeInDays : function(){
+                    return 'Your age in days is : '+ this.age * 365;
+                },
+                showNewDate : function(){
+                    this.date = Date();
+                },
+            },
+            // whenever the user changes their infos the function will not be called again 
+            computed:{
+                calcAge : function() {
+                    return this.age * 2;
+                },
+                decorateMsg : function() {
+                    return this.message.split('').reverse().join('');
+                },
+                showFullName : function() {
+                    return this.firstName + ' ' + this.lastName;
+                },
+                filterLang: function() {
+                    var filtering = new RegExp(this.findLang , 'i');
+                    return this.languages.filter( el => el.match(filtering));
+                },
+                ValidateUserName: function () {
+                    if (!this.username){
+                        return 'Username is required';
+                    } else if (this.username.length < 8) {
+                        return 'Username must be at least 8 characters';
+                    } else if (! isNaN(this.username)) {
+                        return 'Username must be a string';
+                    } else { 
+                        return 'Hello from VueJs ' + this.username;
+                    }
+                },
+            },
+        });
+
+    </script>
+</body>
+</html>
