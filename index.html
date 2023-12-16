@@ -93,6 +93,21 @@
         <label>Write Your UserName:</label>
         <input type="text" v-model.lazy="username">
         <p>{{ ValidateUserName }}</p>
+
+        <!-- watch -->
+        <label>Egyptian pound</label>
+        <input type="text" v-model="eg">
+        <label>USD</label>
+        <input type="text" v-model="usd">
+        <p>#############################################</p>
+
+        <!-- advanced example on watch -->
+        <label>Hour:</label>
+        <input type="text" v-model="hour">
+        <label>Minute:</label>
+        <input type="text" v-model="Minute">
+        <label>Second:</label>
+        <input type="text" v-model="Second">
     </div>
 
     <script src="JS/vue.js"></script>
@@ -182,6 +197,12 @@
 
                 username: '',
 
+                eg: '',
+                usd: '',
+                
+                hour: 0,
+                Minute: 0,
+                Second: 0,
             },
             methods: {
                 saySomeThing : function() {
@@ -223,6 +244,28 @@
                         return 'Hello from VueJs ' + this.username;
                     }
                 },
+            },
+            watch: {
+                eg: function(v){
+                    this.usd = v / 30;
+                },
+                usd: function(v){
+                    this.eg = v * 30;
+                },
+
+                // advanced example:
+                hour: function(v){
+                    this.Minute = v * 60;
+                },
+                Minute: function(v){
+                    this.hour = v / 60;
+                    this.Second = v * 60;
+                },
+                Second: function(v){
+                    this.Minute = v / 60;
+                },
+
+                
             },
         });
 
